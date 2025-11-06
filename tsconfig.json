@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    // Environment Settings
+    "module": "nodenext",
+    "target": "esnext",
+    "moduleResolution": "nodenext", // Add this crucial setting
+
+    // Ensure @types/node is installed via 'npm install -D @types/node'
+    "types": ["node"],
+    "lib": ["es2022"], // Use a specific ES version, matching modern Node.js capabilities
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Recommended Options
+    "strict": true,
+    // "jsx": "react-jsx", // Not needed for a standard Node.js API
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+
+    // Stricter Typechecking Options (optional, enable as needed for higher code quality)
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    "esModuleInterop": true, // Highly recommended for interoperability
+    "forceConsistentCasingInFileNames": true // Good practice
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
