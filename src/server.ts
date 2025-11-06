@@ -18,8 +18,7 @@ const server = new McpServer({
 async function getMyCalendarDataByDate({ date }: { date?: string }) {
   const calendar = google.calendar({
     version: "v3",
-    // auth: `${process.env.GOOGLE_PUBLIC_API_KEY}`,
-    auth: "AIzaSyD1UZRRDTPWcKc_Go3dHA4PW3DkC3Z1qCQ",
+    auth: `${process.env.GOOGLE_PUBLIC_API_KEY}`,
   });
 
   const givenOrToday = date ?? new Date().toISOString();
@@ -38,8 +37,8 @@ async function getMyCalendarDataByDate({ date }: { date?: string }) {
 
   try {
     const res = await calendar.events.list({
-      // calendarId: `${process.env.CALENDAR_ID}`,
-      calendarId: "ahjim420@gmail.com",
+      calendarId: `${process.env.CALENDAR_ID}`,
+
       timeMin: start.toISOString(),
       timeMax: end.toISOString(),
       maxResults: 10,
