@@ -13,11 +13,10 @@ const server = new McpServer({
     },
 });
 // Tool function
-async function getMyCalendarDataByDate({ date }) {
+async function getMyCalendarDataByDate(date) {
     const calendar = google.calendar({
         version: "v3",
-        // auth: `${process.env.GOOGLE_PUBLIC_API_KEY}`,
-        auth: "AIzaSyD1UZRRDTPWcKc_Go3dHA4PW3DkC3Z1qCQ",
+        auth: `${process.env.GOOGLE_PUBLIC_API_KEY}`,
     });
     const givenOrToday = date ?? new Date().toISOString();
     // Calculate the start & end of the given date(UTC)
@@ -31,8 +30,7 @@ async function getMyCalendarDataByDate({ date }) {
     end.setUTCDate(end.getUTCDate() + 1);
     try {
         const res = await calendar.events.list({
-            // calendarId: `${process.env.CALENDAR_ID}`,
-            calendarId: "ahjim420@gmail.com",
+            calendarId: `${process.env.CALENDAR_ID}`,
             timeMin: start.toISOString(),
             timeMax: end.toISOString(),
             maxResults: 10,
@@ -100,21 +98,23 @@ server.registerTool("do_sum", {
     };
 });
 // Get Calendar Data
-server.tool("getMyCalendarDataByDate", {
+server.registerTool("getMyCalendarDataByDate", {
     title: "Availability Check",
     description: "Check whether the user free today or not?",
     inputSchema: {
-        date: z.string().optional(),
-        // .refine((val) => !val || !isNaN(Date.parse(val)), {
-        //   message: "Invalid date format. Please provide a valid date string.",
-        // }),
+        date: z
+            .string()
+            .optional()
+            .refine((val) => !val || !isNaN(Date.parse(val)), {
+            message: "Invalid date format. Please provide a valid date string.",
+        }),
     },
 }, async ({ date }) => {
     return {
         content: [
             {
                 type: "text",
-                text: JSON.stringify(await getMyCalendarDataByDate({ date })),
+                text: JSON.stringify(await getMyCalendarDataByDate(date)),
             },
         ],
     };

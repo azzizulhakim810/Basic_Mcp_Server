@@ -15,7 +15,7 @@ const server = new McpServer({
 });
 
 // Tool function
-async function getMyCalendarDataByDate({ date }: { date?: string }) {
+async function getMyCalendarDataByDate(date?: string) {
   const calendar = google.calendar({
     version: "v3",
     auth: `${process.env.GOOGLE_PUBLIC_API_KEY}`,
@@ -117,16 +117,18 @@ server.registerTool(
 );
 
 // Get Calendar Data
-server.tool(
+server.registerTool(
   "getMyCalendarDataByDate",
   {
     title: "Availability Check",
     description: "Check whether the user free today or not?",
     inputSchema: {
-      date: z.string().optional(),
-      // .refine((val) => !val || !isNaN(Date.parse(val)), {
-      //   message: "Invalid date format. Please provide a valid date string.",
-      // }),
+      date: z
+        .string()
+        .optional()
+        .refine((val) => !val || !isNaN(Date.parse(val)), {
+          message: "Invalid date format. Please provide a valid date string.",
+        }),
     },
   },
   async ({ date }) => {
@@ -134,7 +136,7 @@ server.tool(
       content: [
         {
           type: "text",
-          text: JSON.stringify(await getMyCalendarDataByDate({ date })),
+          text: JSON.stringify(await getMyCalendarDataByDate(date)),
         },
       ],
     };
