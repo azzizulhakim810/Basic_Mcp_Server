@@ -1,6 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { google } from "googleapis";
 import z from "zod";
+import "dotenv/config";
+// Create server instance
 const server = new McpServer({
     name: "basics",
     version: "1.0.0",
@@ -9,6 +12,56 @@ const server = new McpServer({
         tools: {},
     },
 });
+// Tool function
+async function getMyCalendarDataByDate({ date }) {
+    const calendar = google.calendar({
+        version: "v3",
+        // auth: `${process.env.GOOGLE_PUBLIC_API_KEY}`,
+        auth: "AIzaSyD1UZRRDTPWcKc_Go3dHA4PW3DkC3Z1qCQ",
+    });
+    const givenOrToday = date ?? new Date().toISOString();
+    // Calculate the start & end of the given date(UTC)
+    const start = new Date(givenOrToday);
+    // Validate the date
+    if (isNaN(start.getTime())) {
+        return { error: "Invalid date provided" };
+    }
+    start.setUTCHours(0, 0, 0, 0);
+    const end = new Date(start);
+    end.setUTCDate(end.getUTCDate() + 1);
+    try {
+        const res = await calendar.events.list({
+            // calendarId: `${process.env.CALENDAR_ID}`,
+            calendarId: "ahjim420@gmail.com",
+            timeMin: start.toISOString(),
+            timeMax: end.toISOString(),
+            maxResults: 10,
+            singleEvents: true,
+            orderBy: "startTime",
+        });
+        const events = res.data.items || [];
+        const meetings = events.map((event) => {
+            const start = event.start.dateTime || event.start.date;
+            return `${event.summary} at ${start}`;
+        });
+        if (meetings.length > 0) {
+            return {
+                meetings,
+            };
+        }
+        else {
+            return {
+                meetings: [],
+            };
+        }
+    }
+    catch (err) {
+        return {
+            error: err.message,
+        };
+    }
+}
+// Ping Text Tool
 server.registerTool("ping", {
     title: "Ping Tool",
     description: "Echoes the text back so the host can verify the tool is reachable.",
@@ -30,6 +83,7 @@ async ({ text }) => {
         ],
     };
 });
+// Do Sum Tool
 server.registerTool("do_sum", {
     title: "Add two numbers",
     description: "Adds a and b and returns the numeric result as text",
@@ -45,12 +99,33 @@ server.registerTool("do_sum", {
         structuredContent: output,
     };
 });
+// Get Calendar Data
+server.tool("getMyCalendarDataByDate", {
+    title: "Availability Check",
+    description: "Check whether the user free today or not?",
+    inputSchema: {
+        date: z.string().optional(),
+        // .refine((val) => !val || !isNaN(Date.parse(val)), {
+        //   message: "Invalid date format. Please provide a valid date string.",
+        // }),
+    },
+}, async ({ date }) => {
+    return {
+        content: [
+            {
+                type: "text",
+                text: JSON.stringify(await getMyCalendarDataByDate({ date })),
+            },
+        ],
+    };
+});
 // Start the MCP Server
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
     console.error("MCP Server running on stdio transport");
 }
+// call the initialization
 main().catch((error) => {
     console.error("Server Error", error);
     process.exit(1);
