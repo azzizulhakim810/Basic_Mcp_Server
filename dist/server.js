@@ -30,6 +30,21 @@ async ({ text }) => {
         ],
     };
 });
+server.registerTool("do_sum", {
+    title: "Add two numbers",
+    description: "Adds a and b and returns the numeric result as text",
+    inputSchema: {
+        a: z.number(),
+        b: z.number(),
+    },
+    outputSchema: { result: z.number() },
+}, async ({ a, b }) => {
+    const output = { result: a + b };
+    return {
+        content: [{ type: "text", text: JSON.stringify(output) }],
+        structuredContent: output,
+    };
+});
 // Start the MCP Server
 async function main() {
     const transport = new StdioServerTransport();
