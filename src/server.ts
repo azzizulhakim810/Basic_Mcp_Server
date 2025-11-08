@@ -21,10 +21,12 @@ async function getMyCalendarDataByDate(date?: string) {
     auth: `${process.env.GOOGLE_PUBLIC_API_KEY}`,
   });
 
-  const givenOrToday = date ?? new Date().toISOString();
+  // If the date is not given
+  // const givenOrToday = date ?? new Date().toISOString();
 
   // Calculate the start & end of the given date(UTC)
-  const start = new Date(givenOrToday);
+  // const start = new Date(givenOrToday);
+  const start = new Date(date);
 
   // Validate the date
   if (isNaN(start.getTime())) {
