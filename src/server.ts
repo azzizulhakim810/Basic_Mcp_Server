@@ -6,7 +6,7 @@ import "dotenv/config";
 
 // Create server instance
 const server = new McpServer({
-  name: "basics",
+  name: "basics Implementation",
   version: "1.0.0",
   capabilities: {
     resources: {},
@@ -22,11 +22,11 @@ async function getMyCalendarDataByDate(date?: string) {
   });
 
   // If the date is not given
-  // const givenOrToday = date ?? new Date().toISOString();
+  const givenOrToday = date ?? new Date().toISOString();
 
   // Calculate the start & end of the given date(UTC)
-  // const start = new Date(givenOrToday);
-  const start = new Date(date);
+  const start = new Date(givenOrToday);
+  // const start = new Date(date);
 
   // Validate the date
   if (isNaN(start.getTime())) {
