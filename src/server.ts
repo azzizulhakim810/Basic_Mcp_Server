@@ -123,7 +123,7 @@ server.registerTool(
   "getMyCalendarDataByDate",
   {
     title: "Schedule Checker",
-    description: "Check whether the user free today or not?",
+    description: "Check my schedule today?",
     inputSchema: {
       date: z
         .string()
