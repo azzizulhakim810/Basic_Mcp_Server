@@ -99,7 +99,7 @@ server.registerTool(
 
 // Do Sum Tool
 server.registerTool(
-  "do_sum",
+  "do_the_sum",
   {
     title: "Add two numbers",
     description: "Adds a and b and returns the numeric result as text",
