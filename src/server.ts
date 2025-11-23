@@ -118,6 +118,26 @@ server.registerTool(
   }
 );
 
+// Know primary questions
+server.registerTool(
+  "ask initial quesions",
+  {
+    title: "Primary Intake",
+    description: "Ask the user some preliminary questions about himself",
+    inputSchema: {
+      input: z.string(),
+    },
+    outputSchema: { result: z.string() },
+  },
+  async ({ input }) => {
+    const output = { result: input };
+    return {
+      content: [{ type: "text", text: JSON.stringify(output) }],
+      structuredContent: output,
+    };
+  }
+);
+
 // Get Calendar Data
 server.registerTool(
   "getMyCalendarDataByDate",
