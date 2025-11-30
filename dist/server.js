@@ -5,7 +5,7 @@ import z from "zod";
 import "dotenv/config";
 // Create server instance
 const server = new McpServer({
-    name: "basics",
+    name: "basics Implementation",
     version: "1.0.0",
     capabilities: {
         resources: {},
@@ -18,9 +18,11 @@ async function getMyCalendarDataByDate(date) {
         version: "v3",
         auth: `${process.env.GOOGLE_PUBLIC_API_KEY}`,
     });
+    // If the date is not given
     const givenOrToday = date ?? new Date().toISOString();
     // Calculate the start & end of the given date(UTC)
     const start = new Date(givenOrToday);
+    // const start = new Date(date);
     // Validate the date
     if (isNaN(start.getTime())) {
         return { error: "Invalid date provided" };
@@ -82,7 +84,7 @@ async ({ text }) => {
     };
 });
 // Do Sum Tool
-server.registerTool("do_sum", {
+server.registerTool("do_the_sum", {
     title: "Add two numbers",
     description: "Adds a and b and returns the numeric result as text",
     inputSchema: {
@@ -93,14 +95,40 @@ server.registerTool("do_sum", {
 }, async ({ a, b }) => {
     const output = { result: a + b };
     return {
-        content: [{ type: "text", text: JSON.stringify(output) }],
+        content: [
+            {
+                type: "text",
+                text: JSON.stringify(output),
+            },
+        ],
         structuredContent: output,
+    };
+});
+// Know primary questions
+server.registerTool("ask_initial_quesions", {
+    title: "Primary Intake",
+    description: "Ask the user some preliminary questions about himself",
+    inputSchema: {
+        text: z.string().optional(),
+    },
+    // outputSchema: { result: z.string() },
+}, async ({ text }) => {
+    const output = text
+        ? `User - you said: ${text}`
+        : `User - No text provided`;
+    return {
+        content: [
+            {
+                type: "text",
+                text: output,
+            },
+        ],
     };
 });
 // Get Calendar Data
 server.registerTool("getMyCalendarDataByDate", {
-    title: "Availability Check",
-    description: "Check whether the user free today or not?",
+    title: "Schedule Checker",
+    description: "Check my schedule today?",
     inputSchema: {
         date: z
             .string()

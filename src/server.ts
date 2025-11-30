@@ -112,7 +112,12 @@ server.registerTool(
   async ({ a, b }) => {
     const output = { result: a + b };
     return {
-      content: [{ type: "text", text: JSON.stringify(output) }],
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(output),
+        },
+      ],
       structuredContent: output,
     };
   }
@@ -120,20 +125,26 @@ server.registerTool(
 
 // Know primary questions
 server.registerTool(
-  "ask initial quesions",
+  "ask_initial_quesions",
   {
     title: "Primary Intake",
     description: "Ask the user some preliminary questions about himself",
     inputSchema: {
-      input: z.string(),
+      text: z.string().optional(),
     },
-    outputSchema: { result: z.string() },
+    // outputSchema: { result: z.string() },
   },
-  async ({ input }) => {
-    const output = { result: input };
+  async ({ text }) => {
+    const output = text
+      ? `User - you said: ${text}`
+      : `User - No text provided`;
     return {
-      content: [{ type: "text", text: JSON.stringify(output) }],
-      structuredContent: output,
+      content: [
+        {
+          type: "text",
+          text: output,
+        },
+      ],
     };
   }
 );
