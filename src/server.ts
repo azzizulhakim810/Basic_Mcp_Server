@@ -98,31 +98,31 @@ server.registerTool(
 );
 
 // Ask Initial Questions Tool
-// server.registerTool(
-//   "ask_initial_quesions",
-//   {
-//     title: "Primary Intake Questions",
-//     description:
-//       "This tool asks predefined onboarding questions about the student. Ask the user about this name, address, education, family, goal etc. The tone should be friendly",
-//     inputSchema: {
-//       text: z.string().optional(),
-//     },
-//   },
-//   // handler Function
-//   async ({ text }) => {
-//     const message = text
-//       ? `User - you said: ${text}`
-//       : `User - No text provided`;
-//     return {
-//       content: [
-//         {
-//           type: "text",
-//           text: message,
-//         },
-//       ],
-//     };
-//   }
-// );
+server.registerTool(
+  "ask_initial_quesions",
+  {
+    title: "Primary Intake Questions",
+    description:
+      "This tool asks predefined onboarding questions about the student. Ask the user about this name, address, education, family, goal etc. The tone should be friendly",
+    inputSchema: {
+      text: z.string().optional(),
+    },
+  },
+  // handler Function
+  async ({ text }) => {
+    const message = text
+      ? `User - you said: ${text}`
+      : `User - No text provided`;
+    return {
+      content: [
+        {
+          type: "text",
+          text: message,
+        },
+      ],
+    };
+  }
+);
 
 // Do Sum Tool
 server.registerTool(
