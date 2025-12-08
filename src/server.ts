@@ -129,7 +129,7 @@ server.registerTool(
   "do_the_sum",
   {
     title: "Add two numbers",
-    description: "Adds a and b and returns the numeric result as text",
+    description: "Adds a and b and returns the numeric result",
     inputSchema: {
       a: z.number(),
       b: z.number(),
