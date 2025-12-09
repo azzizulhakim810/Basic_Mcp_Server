@@ -151,30 +151,30 @@ server.registerTool(
 );
 
 // Know primary questions
-// server.registerTool(
-//   "ask_initial_quesions",
-//   {
-//     title: "Primary Intake",
-//     description: "Ask the user some preliminary questions about himself",
-//     inputSchema: {
-//       text: z.string().optional(),
-//     },
-//     // outputSchema: { result: z.string() },
-//   },
-//   async ({ text }) => {
-//     const output = text
-//       ? `User - you said: ${text}`
-//       : `User - No text provided`;
-//     return {
-//       content: [
-//         {
-//           type: "text",
-//           text: output,
-//         },
-//       ],
-//     };
-//   }
-// );
+server.registerTool(
+  "ask_initial_quesions",
+  {
+    title: "Primary Intake",
+    description: "Ask the user some preliminary questions about himself",
+    inputSchema: {
+      text: z.string().optional(),
+    },
+    // outputSchema: { result: z.string() },
+  },
+  async ({ text }) => {
+    const output = text
+      ? `User - you said: ${text}`
+      : `User - No text provided`;
+    return {
+      content: [
+        {
+          type: "text",
+          text: output,
+        },
+      ],
+    };
+  }
+);
 
 // Get Calendar Data
 server.registerTool(
